@@ -7,8 +7,18 @@ class Config(object):
     """Base configuration."""
     basedir = os.path.abspath(os.path.dirname(__file__))
     SQLALCHEMY_ECHO = False
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
-    SQLALCHEMY_DATABASE_URI = "sqlite:///devdata.db"
+    APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
+    PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
+    BCRYPT_LOG_ROUNDS = 13
+    DEBUG_TB_INTERCEPT_REDIRECTS = False
+    CACHE_TYPE = 'simple'  # Can be "memcached", "redis", etc.
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    ENV = 'dev'
+    DEBUG = True
+    DB_NAME = ENV + '.db'
+    # Put the db file in project root
+    DB_PATH = os.path.join(PROJECT_ROOT, DB_NAME)
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(DB_PATH)
     CELERY_BROKER_URL = "redis://localhost:6379/0"
     CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
     CELERYBEAT_SCHEDULE = {
@@ -26,8 +36,11 @@ class ProdConfig(Config):
     """Production configuration."""
 
     ENV = 'prod'
-    DEBUG = False
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///proddata.db'
+    DEBUG = True
+    DB_NAME = ENV+'.db'
+    # Put the db file in project root
+    DB_PATH = os.path.join(Config.PROJECT_ROOT, DB_NAME)
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(DB_PATH)
 
 
 class DevConfig(Config):
@@ -35,8 +48,11 @@ class DevConfig(Config):
 
     ENV = 'dev'
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///devdata.db'
-    CACHE_TYPE = 'simple'
+    DB_NAME = ENV + '.db'
+    # Put the db file in project root
+    DB_PATH = os.path.join(Config.PROJECT_ROOT, DB_NAME)
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(DB_PATH)
+    CACHE_TYPE = 'simple'  # Can be "memcached", "redis", etc.
 
 class TestConfig(Config):
     """Test configuration."""

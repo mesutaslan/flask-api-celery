@@ -5,6 +5,7 @@ from flask_restful import Api
 from flask import Blueprint
 from myapp.settings import DevConfig
 from myapp.exceptions import InvalidUsage
+from myapp.contacts.resources import ContactResource, ContactItemResource, ContactByUsernameResource
 from myapp.extentions import db, migrate, cache
 
 
@@ -31,6 +32,9 @@ def register_endpoints(app):
     api_blue_print = Blueprint('api', __name__)
     api = Api(api_blue_print)
     app.register_blueprint(api_blue_print, url_prefix='/api')
+    api.add_resource(ContactResource, '/contacts', endpoint='contacts')
+    api.add_resource(ContactItemResource, '/contacts/<int:contact_id>', endpoint='contact')
+    api.add_resource(ContactByUsernameResource, '/contacts/<string:username>', endpoint='contactByUsername')
 
 
 def register_errorhandlers(app):
