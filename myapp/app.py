@@ -3,18 +3,27 @@
 from flask import Flask
 from flask_restful import Api
 from flask import Blueprint
-from myapp.settings import ProdConfig
+from myapp.settings import DevConfig
 from myapp.exceptions import InvalidUsage
+from myapp.extentions import db, migrate, cache
 
 
-def create_app(config_object=ProdConfig):
+def create_app(config_object=DevConfig):
 
     app = Flask(__name__.split('.')[0])
     app.url_map.strict_slashes = False
     app.config.from_object(config_object)
+    register_extensions(app)
     register_endpoints(app)
     register_errorhandlers(app)
     return app
+
+
+def register_extensions(app):
+    """Register Flask extensions."""
+    db.init_app(app)
+    migrate.init_app(app, db)
+    cache.init_app(app)
 
 
 def register_endpoints(app):
