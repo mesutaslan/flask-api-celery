@@ -1,5 +1,3 @@
-from builtins import staticmethod
-
 from flask import request
 from flask_restful import Resource
 from myapp.contacts.models import Contact

@@ -6,6 +6,7 @@ from flask import Blueprint
 from myapp.settings import DevConfig
 from myapp.exceptions import InvalidUsage
 from myapp.contacts.resources import ContactResource, ContactItemResource, ContactByUsernameResource
+from myapp.emails.resources import EmailResource, EmailItemResource
 from myapp.extentions import db, migrate, cache
 
 
@@ -35,6 +36,9 @@ def register_endpoints(app):
     api.add_resource(ContactResource, '/contacts', endpoint='contacts')
     api.add_resource(ContactItemResource, '/contacts/<int:contact_id>', endpoint='contact')
     api.add_resource(ContactByUsernameResource, '/contacts/<string:username>', endpoint='contactByUsername')
+
+    api.add_resource(EmailResource, '/emails', endpoint='emails')
+    api.add_resource(EmailItemResource, '/emails/<int:email_id>', endpoint='email')
 
 
 def register_errorhandlers(app):
