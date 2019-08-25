@@ -23,11 +23,11 @@ class Config(object):
     CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
     CELERYBEAT_SCHEDULE = {
         'run-every-15-second': {
-            'task': 'tasks.cronjobs.create_contact_with_random_data',
+            'task': 'myapp.contacts.tasks.create_contact_with_random_data',
             'schedule': timedelta(seconds=15)
         },
         'run-every-1-minute': {
-            'task': 'tasks.cronjobs.remove_older_one_mn_contacts',
+            'task': 'myapp.contacts.tasks.remove_older_one_mn_contacts',
             'schedule': timedelta(seconds=60)
         }
     }
