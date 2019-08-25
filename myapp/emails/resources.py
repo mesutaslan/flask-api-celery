@@ -2,6 +2,7 @@ from flask import request
 from flask_restful import Resource
 from myapp.emails.models import Email
 from myapp.emails.serializers import EmailSchema
+from myapp.exceptions import AppError
 
 emails_schema = EmailSchema(many=True)
 email_schema = EmailSchema()
@@ -17,15 +18,13 @@ class EmailResource(Resource):
     def post(self):
         json_data = request.get_json(force=True)
         if not json_data:
-            return {'message': 'No input data provided'}, 400
+            raise AppError.no_input_data_provided()
         data, errors = email_schema.load(json_data)
-        print(data['email'])
-        exit
         if errors:
             return errors, 422
         email = Email.query.filter_by(email=data['email']).first()
         if email:
-            return {'message': 'Email already exists'}, 400
+            raise AppError.email_already_exist()
         email = Email(
             email=json_data['email'],
             contact_id=json_data['contact_id']
@@ -41,20 +40,20 @@ class EmailItemResource(Resource):
     def get(self, email_id):
         email = Email.query.filter_by(id=email_id).first()
         if not email:
-            return {'message': 'Email does not exist'}, 400
+            raise AppError.email_not_found()
         result = email_schema.dump(email).data
         return {'status': 'success', 'data': result}, 200
 
     def put(self, email_id):
         json_data = request.get_json(force=True)
         if not json_data:
-            return {'message': 'No input data provided'}, 400
+            raise AppError.no_input_data_provided()
         data, errors = email_schema.load(json_data)
         if errors:
             return errors, 422
         email = Email.query.filter_by(id=email_id).first()
         if not email:
-            return {'message': 'Email does not exist'}, 400
+            raise AppError.email_not_found()
         email.email = data['email']
         email.update()
 
@@ -64,7 +63,7 @@ class EmailItemResource(Resource):
     def delete(self, email_id):
         json_data = request.get_json(force=True)
         if not json_data:
-            return {'message': 'No input data provided'}, 400
+            raise AppError.no_input_data_provided()
         data, errors = email_schema.load(json_data)
         if errors:
             return errors, 422

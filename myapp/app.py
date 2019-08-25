@@ -4,7 +4,7 @@ from flask import Flask
 from flask_restful import Api
 from flask import Blueprint
 from myapp.settings import DevConfig
-from myapp.exceptions import InvalidUsage
+from myapp.exceptions import AppError
 from myapp.contacts.resources import ContactResource, ContactItemResource, ContactByUsernameResource
 from myapp.emails.resources import EmailResource, EmailItemResource
 from myapp.extentions import db, migrate, cache
@@ -48,4 +48,4 @@ def register_errorhandlers(app):
         response.status_code = error.status_code
         return response
 
-    app.errorhandler(InvalidUsage)(errorhandler)
+    app.errorhandler(AppError)(errorhandler)

@@ -8,10 +8,12 @@ def template(data, code=500):
 CONTACT_NOT_FOUND = template(['Contact not found'], code=404)
 CONTACT_ALREADY_EXIST = template(['Contact already exist'], code=422)
 UNKNOWN_ERROR = template([], code=500)
+EMAIL_NOT_FOUND = template(['Email not found'], code=404)
 EMAIL_ALREADY_EXIST = template(['Email already exist'], code=422)
+NO_INPUT_DATA = template(['No input data provided'], code=400)
 
 
-class InvalidUsage(Exception):
+class AppError(Exception):
     status_code = 500
 
     def __init__(self, message, status_code=None, payload=None):
@@ -38,5 +40,13 @@ class InvalidUsage(Exception):
         return cls(**UNKNOWN_ERROR)
 
     @classmethod
-    def email_not_owned(cls):
+    def email_not_found(cls):
+        return cls(**EMAIL_NOT_FOUND)
+
+    @classmethod
+    def email_already_exist(cls):
         return cls(**EMAIL_ALREADY_EXIST)
+
+    @classmethod
+    def no_input_data_provided(cls):
+        return cls(**NO_INPUT_DATA)
