@@ -1,4 +1,5 @@
 from myapp.extentions import db
+from myapp.emails.models import Email
 
 
 class Contact(db.Model):
@@ -10,7 +11,7 @@ class Contact(db.Model):
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
     updated_at = db.Column(db.TIMESTAMP, onupdate=db.func.current_timestamp())
     is_active = db.Column(db.Boolean, default=True)
-    emails = db.relationship('Email', cascade='delete', single_parent=False, order_by='desc(Email.id)')
+    emails = db.relationship(Email, cascade='delete', single_parent=False, order_by=Email.id)
 
     def __init__(self, username, first_name, last_name):
         self.username = username

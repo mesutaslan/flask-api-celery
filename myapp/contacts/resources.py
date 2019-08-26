@@ -65,17 +65,12 @@ class ContactItemResource(Resource):
         return {"status": 'success', 'data': result}, 204
 
     def delete(self, contact_id):
-        json_data = request.get_json(force=True)
-        if not json_data:
-            raise AppError.no_input_data_provided()
-        data, errors = contact_schema.load(json_data)
-        if errors:
-            return errors, 422
-        contact = Contact.query.filter_by(id=contact_id).delete()
-        db.session.commit()
+        contact = Contact.query.filter_by(id=contact_id).first()
+        if not contact:
+            raise AppError.contact_not_found()
+        contact.delete()
+        return {"status": 'success', 'data': contact.id}, 200
 
-        result = contact_schema.dump(contact).data
-        return {"status": 'success', 'data': result}, 204
 
 class ContactByUsernameResource(Resource):
 
