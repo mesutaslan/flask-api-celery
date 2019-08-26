@@ -61,15 +61,9 @@ class EmailItemResource(Resource):
         return {"status": 'success', 'data': result}, 204
 
     def delete(self, email_id):
-        json_data = request.get_json(force=True)
-        if not json_data:
-            raise AppError.no_input_data_provided()
-        data, errors = email_schema.load(json_data)
-        if errors:
-            return errors, 422
-        email = Email.query.filter_by(id=email_id).delete()
+        email = Email.query.filter_by(id=email_id).first()
+        if not email:
+            raise AppError.email_not_found()
         email.delete()
-
-        result = email_schema.dump(email).data
-        return {"status": 'success', 'data': result}, 204
+        return {"status": 'success', 'data': email.id}, 200
 
