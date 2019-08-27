@@ -60,5 +60,8 @@ class TestConfig(Config):
 
     TESTING = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///testdata.db'
+    ENV = 'test'
+    DB_NAME = ENV + '.db'
+    DB_PATH = os.path.join(Config.PROJECT_ROOT, DB_NAME)
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(DB_PATH)
     BCRYPT_LOG_ROUNDS = 4
