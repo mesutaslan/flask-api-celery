@@ -35,4 +35,3 @@ http://127.0.0.1:5000/contacts/<string:username> {GET}
 http://127.0.0.1:5000/api/emails {GET,POST} 
 http://127.0.0.1:5000/api/emails/<int:id> {GET,PUT,DELETE}
 ````
-
