@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """The app factory."""
 from flask import Flask
 from flask_restful import Api
